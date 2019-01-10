@@ -12,7 +12,12 @@ class MyApp extends StatelessWidget {
       home: Scaffold(
         appBar: AppBar(title: Text('Welcome!'), centerTitle: true),
         body: Center(
-          child: CurrentTime(),
+          child: Column(
+            mainAxisAlignment: MainAxisAlignment.center,
+            children: <Widget>[
+              CurrentTime(),
+            ],
+          ),
         ),
       ),
     );
@@ -35,16 +40,6 @@ class CurrentTimeState extends State<CurrentTime> {
 
   @override
   Widget build(BuildContext context) {
-    return Column(
-      mainAxisAlignment: MainAxisAlignment.center,
-      children: <Widget>[
-        Text(DateFormat.jms().format(new DateTime.now())),
-        FlatButton(
-            onPressed: () {
-              setState(() {});
-            },
-            child: Text("hmmm")),
-      ],
-    );
+    return Text(DateFormat.jms().format(new DateTime.now()));
   }
 }
