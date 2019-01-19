@@ -10,10 +10,6 @@ class MainPage extends StatefulWidget {
 class MainPageState extends State<MainPage> {
   int _selectedIndex = 0;
 
-  Widget selectedPage() {
-    return _selectedIndex == 0 ? HomePage() : FeedsPage();
-  }
-
   @override
   Widget build(BuildContext context) {
     return Scaffold(
@@ -28,14 +24,8 @@ class MainPageState extends State<MainPage> {
               icon: Icon(Icons.business), title: Text('Business')),
         ],
         currentIndex: _selectedIndex,
-        onTap: _onItemTapped,
+        onTap: (index) => setState(() => _selectedIndex = index),
       ),
     );
-  }
-
-  void _onItemTapped(int index) {
-    setState(() {
-      _selectedIndex = index;
-    });
   }
 }
