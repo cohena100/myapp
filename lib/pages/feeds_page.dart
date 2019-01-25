@@ -8,28 +8,22 @@ class FeedsPage extends StatefulWidget {
 }
 
 class FeedsPageState extends State<FeedsPage> {
-  List<String> items = [];
-
-  void setup() async {
-    final RssFeed feed = await getFeed();
-    setState(() {
-      items = feed.items.map((item) => item.title).toList();
-    });
-  }
-
-  @override
-  void initState() {
-    setup();
-    super.initState();
-  }
-
   @override
   Widget build(BuildContext context) {
-    return items.length == 0
-        ? Center(child: CircularProgressIndicator())
-        : ListView(
+    return FutureBuilder(
+      future: getFeed(),
+      builder: (BuildContext context, AsyncSnapshot snapshot) {
+        if (snapshot.connectionState == ConnectionState.done) {
+          final RssFeed feed = snapshot.data;
+          final items = feed.items.map((item) => item.title).toList();
+          return ListView(
             children: items.map(buildItem).toList(),
           );
+        } else {
+          return Center(child: CircularProgressIndicator());
+        }
+      },
+    );
   }
 
   Widget buildItem(String item) {
