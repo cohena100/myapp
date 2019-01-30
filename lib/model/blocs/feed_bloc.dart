@@ -12,6 +12,7 @@ class FeedBloc {
 
   FeedBloc(this.networkProxy) {
     _feedTypeController.stream.listen((feedType) async {
+      _feedSubject.add([]);
       final url = 'http://feeds.reuters.com/reuters/businessNews';
       final RssFeed feed = await networkProxy.getFeed(url);
       final items = feed.items.map((item) => item.title).toList();
