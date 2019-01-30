@@ -1,6 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:myapp/model/model.dart';
-import 'package:myapp/model/feed_bloc.dart';
+import 'package:myapp/model/blocs/feed_bloc.dart';
 
 class FeedsPage extends StatefulWidget {
   @override

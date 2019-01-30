@@ -1,10 +1,12 @@
-import 'package:myapp/model/feed_bloc.dart';
+import 'package:myapp/model/blocs/feed_bloc.dart';
+import 'package:myapp/model/proxies/network_proxy.dart';
 
 class Model {
   FeedBloc feedBloc;
 
   Model() {
-    feedBloc = FeedBloc();
+    final networkProxy = NetworkProxy();
+    feedBloc = FeedBloc(networkProxy);
   }
 }
 
