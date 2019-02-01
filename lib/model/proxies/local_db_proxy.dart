@@ -5,21 +5,21 @@ class FeedElement {
   const FeedElement(this.title, this.description);
 }
 
-enum LocalDBProxyKeys { feed }
+enum LocalDBProxyKeys { feedElements }
 
 abstract class LocalDBProxyProvider {
-  saveFeed(List feed);
-  List loadFeed();
+  saveFeedElements(List feedElements);
+  List loadFeedElements();
 }
 
 class LocalDBProxy implements LocalDBProxyProvider {
   final Map _db = {};
 
-  saveFeed(List feed) {
-    _db[LocalDBProxyKeys.feed] = feed;
+  saveFeedElements(List feed) {
+    _db[LocalDBProxyKeys.feedElements] = feed;
   }
 
-  List loadFeed() {
-    return _db[LocalDBProxyKeys.feed];
+  List loadFeedElements() {
+    return _db[LocalDBProxyKeys.feedElements];
   }
 }

@@ -22,11 +22,11 @@ class FeedBloc {
       _feedSubject.add([]);
       final url = 'http://feeds.reuters.com/reuters/businessNews';
       final RssFeed feed = await _networkProxy.getFeed(url);
-      final feeds = feed.items
+      final feedElements = feed.items
           .map((item) => FeedElement(item.title, item.description))
           .toList();
-      _localDBProxy.saveFeed(feeds);
-      _feedSubject.add(feeds);
+      _localDBProxy.saveFeedElements(feedElements);
+      _feedSubject.add(feedElements);
     });
   }
 
