@@ -6,8 +6,8 @@ class FeedElement {
 }
 
 abstract class LocalDBProxyProvider {
-  saveFeeds(List<FeedElement> feeds);
-  List<FeedElement> loadFeed();
+  saveFeeds(List feeds);
+  List loadFeed();
 }
 
 enum DbKeys { feeds }
@@ -15,11 +15,11 @@ enum DbKeys { feeds }
 class LocalDBProxy implements LocalDBProxyProvider {
   final Map<DbKeys, Object> db = {};
 
-  saveFeeds(List<FeedElement> feeds) {
+  saveFeeds(List feeds) {
     db[DbKeys.feeds] = feeds;
   }
 
-  List<FeedElement> loadFeed() {
+  List loadFeed() {
     return db[DbKeys.feeds];
   }
 }

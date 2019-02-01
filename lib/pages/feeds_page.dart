@@ -11,7 +11,7 @@ class FeedsPage extends StatefulWidget {
 class FeedsPageState extends State<FeedsPage> {
   @override
   Widget build(BuildContext context) {
-    model.feedBloc.feedType.add(FeedType.one);
+    model.feedBloc.feedType.add(FeedsBlocOperation.one);
     return Column(
       children: <Widget>[
         Row(
@@ -19,22 +19,22 @@ class FeedsPageState extends State<FeedsPage> {
           children: <Widget>[
             FlatButton(
                 onPressed: () {
-                  model.feedBloc.feedType.add(FeedType.one);
+                  model.feedBloc.feedType.add(FeedsBlocOperation.one);
                 },
                 child: Text('One')),
             FlatButton(
                 onPressed: () {
-                  model.feedBloc.feedType.add(FeedType.two);
+                  model.feedBloc.feedType.add(FeedsBlocOperation.two);
                 },
                 child: Text('Two')),
           ],
         ),
         Expanded(
-          child: StreamBuilder<List<FeedElement>>(
+          child: StreamBuilder(
             stream: model.feedBloc.feed,
             initialData: [],
             builder: (context, snapshot) {
-              final List<FeedElement> items = snapshot.data;
+              final List items = snapshot.data;
               if (items.length == 0) {
                 return Center(child: CircularProgressIndicator());
               }
@@ -48,7 +48,8 @@ class FeedsPageState extends State<FeedsPage> {
     );
   }
 
-  Widget buildItem(FeedElement feedElement) {
-    return ListTile(title: Text(feedElement.title));
+  Widget buildItem(Object feedElement) {
+    final FeedElement element = feedElement;
+    return ListTile(title: Text(element.title));
   }
 }
