@@ -16,7 +16,7 @@ class FeedsPageState extends State<FeedsPage> {
       children: <Widget>[
         Row(
           mainAxisAlignment: MainAxisAlignment.spaceEvenly,
-          children: <Widget>[
+          children: [
             FlatButton(
                 onPressed: () {
                   model.feedBloc.feedType.add(FeedsBlocOperation.one);
