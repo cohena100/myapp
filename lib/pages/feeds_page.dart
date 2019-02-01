@@ -11,7 +11,7 @@ class FeedsPage extends StatefulWidget {
 class FeedsPageState extends State<FeedsPage> {
   @override
   Widget build(BuildContext context) {
-    model.feedBloc.feedType.add(FeedsBlocOperation.one);
+    model.feedBloc.operation.add(FeedBlocOperation.one);
     return Column(
       children: [
         Row(
@@ -19,12 +19,12 @@ class FeedsPageState extends State<FeedsPage> {
           children: [
             FlatButton(
                 onPressed: () {
-                  model.feedBloc.feedType.add(FeedsBlocOperation.one);
+                  model.feedBloc.operation.add(FeedBlocOperation.one);
                 },
                 child: Text('One')),
             FlatButton(
                 onPressed: () {
-                  model.feedBloc.feedType.add(FeedsBlocOperation.two);
+                  model.feedBloc.operation.add(FeedBlocOperation.two);
                 },
                 child: Text('Two')),
           ],
