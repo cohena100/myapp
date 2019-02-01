@@ -11,13 +11,10 @@ class CurrentTime extends StatefulWidget {
 class CurrentTimeState extends State<CurrentTime> {
   StreamSubscription<int> timer;
 
-  CurrentTimeState() {
-    this.timer = Observable.periodic(Duration(seconds: 1), (i) => i)
-        .listen((i) => this.setState(() {}));
-  }
-
   @override
   void initState() {
+    this.timer = Observable.periodic(Duration(seconds: 1), (i) => i)
+        .listen((i) => this.setState(() {}));
     super.initState();
   }
 

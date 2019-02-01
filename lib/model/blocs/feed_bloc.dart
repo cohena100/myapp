@@ -38,6 +38,11 @@ class FeedBloc {
     _localDBProxy.saveFeedElement(feedElement);
   }
 
+  List loadFeedElements() {
+    final elements = _localDBProxy.loadFeedElements();
+    return elements == null ? [] : elements;
+  }
+
   void close() {
     _feedSubject.close();
     _operationStreamController.close();
