@@ -18,7 +18,7 @@ class FeedBloc {
   Sink get operation => _operationController.sink;
 
   FeedBloc(this._networkProxy, this._localDBProxy) {
-    _operationController.stream.listen((feedType) async {
+    _operationController.stream.listen((op) async {
       _feedSubject.add([]);
       final url = 'http://feeds.reuters.com/reuters/businessNews';
       final RssFeed feed = await _networkProxy.getFeed(url);
