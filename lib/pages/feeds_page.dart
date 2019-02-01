@@ -13,7 +13,7 @@ class FeedsPageState extends State<FeedsPage> {
   Widget build(BuildContext context) {
     model.feedBloc.feedType.add(FeedsBlocOperation.one);
     return Column(
-      children: <Widget>[
+      children: [
         Row(
           mainAxisAlignment: MainAxisAlignment.spaceEvenly,
           children: [
