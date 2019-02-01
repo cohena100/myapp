@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:myapp/model/model.dart';
 import 'package:myapp/model/blocs/feed_bloc.dart';
+import 'package:myapp/model/proxies/local_db_proxy.dart';
 
 class FeedsPage extends StatefulWidget {
   @override
@@ -29,11 +30,11 @@ class FeedsPageState extends State<FeedsPage> {
           ],
         ),
         Expanded(
-          child: StreamBuilder<List<String>>(
+          child: StreamBuilder<List<FeedElement>>(
             stream: model.feedBloc.feed,
             initialData: [],
             builder: (context, snapshot) {
-              final List<String> items = snapshot.data;
+              final List<FeedElement> items = snapshot.data;
               if (items.length == 0) {
                 return Center(child: CircularProgressIndicator());
               }
@@ -47,7 +48,7 @@ class FeedsPageState extends State<FeedsPage> {
     );
   }
 
-  Widget buildItem(String item) {
-    return ListTile(title: Text(item));
+  Widget buildItem(FeedElement feedElement) {
+    return ListTile(title: Text(feedElement.title));
   }
 }
