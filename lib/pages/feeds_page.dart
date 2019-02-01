@@ -12,41 +12,28 @@ class FeedsPageState extends State<FeedsPage> {
   @override
   Widget build(BuildContext context) {
     model.feedBloc.operationSink.add(FeedBlocOperation.one);
-    return Column(
-      children: [
-        Row(
-          mainAxisAlignment: MainAxisAlignment.spaceEvenly,
+    return StreamBuilder(
+      stream: model.feedBloc.feedStream,
+      initialData: [],
+      builder: (context, snapshot) {
+        final progressIndicator = CircularProgressIndicator();
+        final List items = snapshot.data;
+        final visible = items.length == 0 ? true : false;
+        return Column(
           children: [
-            FlatButton(
-                onPressed: () {
-                  model.feedBloc.operationSink.add(FeedBlocOperation.one);
-                },
-                child: Text('One')),
-            FlatButton(
-                onPressed: () {
-                  model.feedBloc.operationSink.add(FeedBlocOperation.two);
-                },
-                child: Text('Two')),
+            Expanded(
+                child: ListView(
+              children:
+                  items.map((item) => buildItem(item as FeedElement)).toList(),
+            )),
+            Center(
+                child: Visibility(
+              child: progressIndicator,
+              visible: visible,
+            ))
           ],
-        ),
-        Expanded(
-          child: StreamBuilder(
-            stream: model.feedBloc.feedStream,
-            initialData: [],
-            builder: (context, snapshot) {
-              final List items = snapshot.data;
-              if (items.length == 0) {
-                return Center(child: CircularProgressIndicator());
-              }
-              return ListView(
-                children: items
-                    .map((item) => buildItem(item as FeedElement))
-                    .toList(),
-              );
-            },
-          ),
-        ),
-      ],
+        );
+      },
     );
   }
 
