@@ -50,7 +50,10 @@ class FeedsPageState extends State<FeedsPage> {
     );
   }
 
-  Widget buildItem(FeedElement element) {
-    return ListTile(title: Text(element.title));
+  Widget buildItem(FeedElement feedElement) {
+    return ListTile(
+      title: Text(feedElement.title),
+      onTap: () => model.feedBloc.saveFeedElement(feedElement),
+    );
   }
 }

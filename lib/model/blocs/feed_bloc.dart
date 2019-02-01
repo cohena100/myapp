@@ -30,6 +30,14 @@ class FeedBloc {
     });
   }
 
+  FeedElement loadFeedElement() {
+    return _localDBProxy.loadFeedElement();
+  }
+
+  saveFeedElement(FeedElement feedElement) {
+    _localDBProxy.saveFeedElement(feedElement);
+  }
+
   void close() {
     _feedSubject.close();
     _operationStreamController.close();
