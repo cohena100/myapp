@@ -7,7 +7,7 @@ class HomePage extends StatelessWidget {
     return Center(
       child: Column(
         mainAxisAlignment: MainAxisAlignment.center,
-        children: <Widget>[
+        children: [
           CurrentTime(),
         ],
       ),

@@ -18,7 +18,7 @@ class MainPageState extends State<MainPage> {
       ),
       body: _selectedIndex == 0 ? HomePage() : FeedsPage(),
       bottomNavigationBar: BottomNavigationBar(
-        items: <BottomNavigationBarItem>[
+        items: [
           BottomNavigationBarItem(icon: Icon(Icons.home), title: Text('Home')),
           BottomNavigationBarItem(
               icon: Icon(Icons.business), title: Text('Business')),
