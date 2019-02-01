@@ -20,7 +20,7 @@ class FeedBloc {
       final feeds = feed.items
           .map((item) => FeedElement(item.title, item.description))
           .toList();
-      localDBProxy.saveFeeds(feeds);
+      localDBProxy.saveFeed(feeds);
       _feedSubject.add(feeds);
     });
   }

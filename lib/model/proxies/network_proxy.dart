@@ -10,7 +10,7 @@ abstract class NetworkProxyProvider {
 class NetworkProxy implements NetworkProxyProvider {
   Future getFeed(String url) async {
     final response = ReceivePort();
-    final Map<String, Object> params = {'url': url, 'port': response.sendPort};
+    final params = {'url': url, 'port': response.sendPort};
     await Isolate.spawn(_feedIsolate, params);
     return response.first;
   }
