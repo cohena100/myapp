@@ -11,14 +11,14 @@ enum FeedBlocOperation {
 
 class FeedBloc {
   final _feedSubject = BehaviorSubject();
-  final _operationController = StreamController();
+  final _operationStreamController = StreamController();
   final NetworkProxyProvider _networkProxy;
   final LocalDBProxy _localDBProxy;
-  Stream get feed => _feedSubject.stream;
-  Sink get operation => _operationController.sink;
+  Stream get feedStream => _feedSubject.stream;
+  Sink get operationSink => _operationStreamController.sink;
 
   FeedBloc(this._networkProxy, this._localDBProxy) {
-    _operationController.stream.listen((op) async {
+    _operationStreamController.stream.listen((operation) async {
       _feedSubject.add([]);
       final url = 'http://feeds.reuters.com/reuters/businessNews';
       final RssFeed feed = await _networkProxy.getFeed(url);
@@ -32,6 +32,6 @@ class FeedBloc {
 
   void close() {
     _feedSubject.close();
-    _operationController.close();
+    _operationStreamController.close();
   }
 }

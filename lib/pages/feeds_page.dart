@@ -11,7 +11,7 @@ class FeedsPage extends StatefulWidget {
 class FeedsPageState extends State<FeedsPage> {
   @override
   Widget build(BuildContext context) {
-    model.feedBloc.operation.add(FeedBlocOperation.one);
+    model.feedBloc.operationSink.add(FeedBlocOperation.one);
     return Column(
       children: [
         Row(
@@ -19,19 +19,19 @@ class FeedsPageState extends State<FeedsPage> {
           children: [
             FlatButton(
                 onPressed: () {
-                  model.feedBloc.operation.add(FeedBlocOperation.one);
+                  model.feedBloc.operationSink.add(FeedBlocOperation.one);
                 },
                 child: Text('One')),
             FlatButton(
                 onPressed: () {
-                  model.feedBloc.operation.add(FeedBlocOperation.two);
+                  model.feedBloc.operationSink.add(FeedBlocOperation.two);
                 },
                 child: Text('Two')),
           ],
         ),
         Expanded(
           child: StreamBuilder(
-            stream: model.feedBloc.feed,
+            stream: model.feedBloc.feedStream,
             initialData: [],
             builder: (context, snapshot) {
               final List items = snapshot.data;
