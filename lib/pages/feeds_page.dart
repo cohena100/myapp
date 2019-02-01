@@ -39,7 +39,9 @@ class FeedsPageState extends State<FeedsPage> {
                 return Center(child: CircularProgressIndicator());
               }
               return ListView(
-                children: items.map(buildItem).toList(),
+                children: items
+                    .map((item) => buildItem(item as FeedElement))
+                    .toList(),
               );
             },
           ),
@@ -48,8 +50,7 @@ class FeedsPageState extends State<FeedsPage> {
     );
   }
 
-  Widget buildItem(Object feedElement) {
-    final FeedElement element = feedElement;
+  Widget buildItem(FeedElement element) {
     return ListTile(title: Text(element.title));
   }
 }
