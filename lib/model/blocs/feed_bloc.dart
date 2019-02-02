@@ -15,9 +15,9 @@ class FeedBloc {
   FeedBloc(this._networkProxy, this._localDBProxy) {
     _operationStreamController.stream.listen((urls) async {
       _feedSubject.add([]);
-      final List<RssFeed> feeds = await _networkProxy.getFeeds(urls);
+      final List feeds = await _networkProxy.getFeeds(urls);
       final feedElements = feeds
-          .map((feed) => feed.items)
+          .map((feed) => (feed as RssFeed).items)
           .reduce((currentItems, allItems) {
             allItems.addAll(currentItems);
             return allItems;
