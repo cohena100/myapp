@@ -14,7 +14,7 @@ class MainPageState extends State<MainPage> {
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(
-        title: Text('BottomNavigationBar Sample'),
+        title: Text('Feeds'),
       ),
       body: _selectedIndex == 0 ? HomePage() : FeedsPage(),
       bottomNavigationBar: BottomNavigationBar(

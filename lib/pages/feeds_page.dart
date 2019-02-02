@@ -4,6 +4,7 @@ import 'package:flutter/material.dart';
 import 'package:myapp/model/model.dart';
 import 'package:myapp/model/blocs/feed_bloc.dart';
 import 'package:myapp/model/proxies/local_db_proxy.dart';
+import 'package:myapp/pages/item_page.dart';
 import 'package:rxdart/rxdart.dart';
 
 class FeedsPage extends StatefulWidget {
@@ -37,28 +38,41 @@ class FeedsPageState extends State<FeedsPage> {
         final progressIndicator = CircularProgressIndicator();
         final List items = snapshot.data;
         final visible = items.length == 0 ? true : false;
-        return Column(
-          children: [
-            Expanded(
-                child: ListView(
-              children:
-                  model.feedBloc.loadFeedElements().map((item) => buildItem(item as FeedElement)).toList(),
-            )),
-            Center(
-                child: Visibility(
-              child: progressIndicator,
-              visible: visible,
-            ))
-          ],
+        return Padding(
+          padding: const EdgeInsets.all(8.0),
+          child: Column(
+            children: [
+              Expanded(
+                  child: ListView(
+                children: model.feedBloc
+                    .loadFeedElements()
+                    .map((item) => buildItem(item as FeedElement, context))
+                    .toList(),
+              )),
+              Center(
+                  child: Visibility(
+                child: progressIndicator,
+                visible: visible,
+              ))
+            ],
+          ),
         );
       },
     );
   }
 
-  Widget buildItem(FeedElement feedElement) {
+  Widget buildItem(FeedElement feedElement, BuildContext context) {
     return ListTile(
       title: Text(feedElement.title),
-      onTap: () => model.feedBloc.saveFeedElement(feedElement),
+      onTap: () {
+        model.feedBloc.saveFeedElement(feedElement);
+        Navigator.push(
+          context,
+          MaterialPageRoute(
+              builder: (context) =>
+                  ItemPage(description: feedElement.description)),
+        );
+      },
     );
   }
 }
