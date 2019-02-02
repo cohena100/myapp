@@ -4,11 +4,6 @@ import 'package:myapp/model/proxies/network_proxy.dart';
 import 'package:rxdart/rxdart.dart';
 import 'package:webfeed/webfeed.dart';
 
-enum FeedBlocOperation {
-  one,
-  two,
-}
-
 class FeedBloc {
   final _feedSubject = BehaviorSubject();
   final _operationStreamController = StreamController();
@@ -18,13 +13,8 @@ class FeedBloc {
   Sink get operationSink => _operationStreamController.sink;
 
   FeedBloc(this._networkProxy, this._localDBProxy) {
-    _operationStreamController.stream.listen((operation) async {
+    _operationStreamController.stream.listen((urls) async {
       _feedSubject.add([]);
-      final urls = [
-        'http://feeds.reuters.com/reuters/businessNews',
-        'http://feeds.reuters.com/reuters/entertainment',
-        'http://feeds.reuters.com/reuters/environment'
-      ];
       final List<RssFeed> feeds = await _networkProxy.getFeeds(urls);
       final feedElements = feeds
           .map((feed) => feed.items)

@@ -2,7 +2,6 @@ import 'dart:async';
 
 import 'package:flutter/material.dart';
 import 'package:myapp/model/model.dart';
-import 'package:myapp/model/blocs/feed_bloc.dart';
 import 'package:myapp/model/proxies/local_db_proxy.dart';
 import 'package:myapp/pages/item_page.dart';
 import 'package:rxdart/rxdart.dart';
@@ -17,8 +16,9 @@ class FeedsPageState extends State<FeedsPage> {
 
   @override
   void initState() {
-    timer = Observable.periodic(Duration(seconds: 20), (i) => i)
-        .listen((i) => model.feedBloc.operationSink.add(FeedBlocOperation.one));
+    timer = Observable.periodic(Duration(seconds: 20), (i) => i).listen((i) =>
+        model.feedBloc.operationSink
+            .add(['http://feeds.reuters.com/reuters/businessNews']));
     super.initState();
   }
 
@@ -30,7 +30,8 @@ class FeedsPageState extends State<FeedsPage> {
 
   @override
   Widget build(BuildContext context) {
-    model.feedBloc.operationSink.add(FeedBlocOperation.one);
+    model.feedBloc.operationSink
+        .add(['http://feeds.reuters.com/reuters/businessNews']);
     return StreamBuilder(
       stream: model.feedBloc.feedStream,
       initialData: [],
@@ -46,7 +47,7 @@ class FeedsPageState extends State<FeedsPage> {
                   child: ListView(
                 children: model.feedBloc
                     .loadFeedElements()
-                    .map((item) => buildItem(item as FeedElement, context))
+                    .map((item) => buildItem(item, context))
                     .toList(),
               )),
               Center(

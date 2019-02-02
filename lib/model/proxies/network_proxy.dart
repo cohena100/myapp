@@ -24,7 +24,7 @@ class NetworkProxy implements NetworkProxyProvider {
 void _feedIsolate(Map params) async {
   final List urls = params[NetworkProxyKeys.urls];
   final SendPort port = params[NetworkProxyKeys.port];
-  final requests = urls.map((url) => http.get(url as String));
+  final requests = urls.map((url) => http.get(url));
   final responses = await Future.wait(requests);
   final rssFeeds = responses.map((response) => RssFeed.parse(response.body)).toList();
   port.send(rssFeeds);
