@@ -3,25 +3,29 @@ import 'dart:isolate';
 import 'package:webfeed/webfeed.dart';
 import 'package:http/http.dart' as http;
 
-enum NetworkProxyKeys { url, port }
+enum NetworkProxyKeys { urls, port }
 
 abstract class NetworkProxyProvider {
-  Future getFeed(String url);
+  Future getFeeds(List urls);
 }
 
 class NetworkProxy implements NetworkProxyProvider {
-  Future getFeed(String url) async {
+  Future getFeeds(List urls) async {
     final response = ReceivePort();
-    final params = {NetworkProxyKeys.url: url, NetworkProxyKeys.port: response.sendPort};
+    final params = {
+      NetworkProxyKeys.urls: urls,
+      NetworkProxyKeys.port: response.sendPort
+    };
     await Isolate.spawn(_feedIsolate, params);
     return response.first;
   }
 }
 
 void _feedIsolate(Map params) async {
-  final String url = params[NetworkProxyKeys.url];
+  final List urls = params[NetworkProxyKeys.urls];
   final SendPort port = params[NetworkProxyKeys.port];
-  final response = await http.get(url);
-  final rssFeed = RssFeed.parse(response.body);
-  port.send(rssFeed);
+  final requests = urls.map((url) => http.get(url as String));
+  final responses = await Future.wait(requests);
+  final rssFeeds = responses.map((response) => RssFeed.parse(response.body)).toList();
+  port.send(rssFeeds);
 }

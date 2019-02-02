@@ -17,7 +17,7 @@ class FeedsPageState extends State<FeedsPage> {
 
   @override
   void initState() {
-    timer = Observable.periodic(Duration(seconds: 5), (i) => i)
+    timer = Observable.periodic(Duration(seconds: 20), (i) => i)
         .listen((i) => model.feedBloc.operationSink.add(FeedBlocOperation.one));
     super.initState();
   }

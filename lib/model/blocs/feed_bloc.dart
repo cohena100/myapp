@@ -20,9 +20,18 @@ class FeedBloc {
   FeedBloc(this._networkProxy, this._localDBProxy) {
     _operationStreamController.stream.listen((operation) async {
       _feedSubject.add([]);
-      final url = 'http://feeds.reuters.com/reuters/businessNews';
-      final RssFeed feed = await _networkProxy.getFeed(url);
-      final feedElements = feed.items
+      final urls = [
+        'http://feeds.reuters.com/reuters/businessNews',
+        'http://feeds.reuters.com/reuters/entertainment',
+        'http://feeds.reuters.com/reuters/environment'
+      ];
+      final List<RssFeed> feeds = await _networkProxy.getFeeds(urls);
+      final feedElements = feeds
+          .map((feed) => feed.items)
+          .reduce((currentItems, allItems) {
+            allItems.addAll(currentItems);
+            return allItems;
+          })
           .map((item) => FeedElement(item.title, item.description))
           .toList();
       _localDBProxy.saveFeedElements(feedElements);
