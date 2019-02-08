@@ -1,6 +1,7 @@
 import 'dart:async';
 
 import 'package:flutter/material.dart';
+import 'package:flutter/cupertino.dart';
 import 'package:myapp/model/model.dart';
 import 'package:myapp/model/proxies/local_db_proxy.dart';
 import 'package:myapp/pages/item_page.dart';
@@ -13,12 +14,22 @@ class FeedsPage extends StatefulWidget {
 
 class FeedsPageState extends State<FeedsPage> {
   StreamSubscription<int> timer;
+  int sharedValue = 0;
+
+  List _feedURLs() {
+    List urls = sharedValue == 0
+        ? ['http://feeds.reuters.com/reuters/businessNews']
+        : [
+            'http://feeds.reuters.com/reuters/entertainment',
+            'http://feeds.reuters.com/reuters/environment'
+          ];
+    return urls;
+  }
 
   @override
   void initState() {
-    timer = Observable.periodic(Duration(seconds: 20), (i) => i).listen((i) =>
-        model.feedBloc.operationSink
-            .add(['http://feeds.reuters.com/reuters/businessNews']));
+    timer = Observable.periodic(Duration(seconds: 30), (i) => i)
+        .listen((i) => model.feedBloc.operationSink.add(_feedURLs()));
     super.initState();
   }
 
@@ -43,6 +54,17 @@ class FeedsPageState extends State<FeedsPage> {
           padding: const EdgeInsets.all(8.0),
           child: Column(
             children: [
+              CupertinoSegmentedControl<int>(
+                children: {
+                  0: Text('Midnight'),
+                  1: Text('Viridian'),
+                },
+                onValueChanged: (int newValue) {
+                  sharedValue = newValue;
+                  model.feedBloc.operationSink.add(_feedURLs());
+                },
+                groupValue: sharedValue,
+              ),
               Expanded(
                   child: ListView(
                 children: model.feedBloc
