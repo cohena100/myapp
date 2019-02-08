@@ -4,6 +4,9 @@ import 'package:rxdart/rxdart.dart';
 import 'dart:async';
 
 class CurrentTime extends StatefulWidget {
+
+  CurrentTime({Key key}):super(key: key);
+
   @override
   CurrentTimeState createState() => new CurrentTimeState();
 }

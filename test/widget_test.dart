@@ -7,29 +7,49 @@
 
 import 'package:flutter/material.dart';
 import 'package:flutter_test/flutter_test.dart';
-
 import 'package:myapp/main.dart';
+import 'package:mockito/mockito.dart';
+import 'package:myapp/model/proxies/network_proxy.dart';
+import 'package:myapp/src/feed_sample.dart';
+
+class MockNetworkProxy extends Mock implements NetworkProxyProvider {}
 
 void main() {
   testWidgets('Counter increments smoke test', (WidgetTester tester) async {
-    // Build our app and trigger a frame.
+    final networkProxy = MockNetworkProxy();
+    when(networkProxy
+            .getFeeds(['http://feeds.reuters.com/reuters/businessNews']))
+        .thenAnswer((_) async => feedBusiness);
+    when(networkProxy
+            .getFeeds(['http://feeds.reuters.com/reuters/entertainment']))
+        .thenAnswer((_) async => feedEntertainment);
+    when(networkProxy
+            .getFeeds(['http://feeds.reuters.com/reuters/environment']))
+        .thenAnswer((_) async => feedEnvironment);
     await tester.pumpWidget(MyApp());
-    expect(1, 1);
+    expect(find.byKey(Key('CurrentTime')), isNotNull);
+    await tester.tap(find.text('Feeds'));
+    await tester.pump();
+    await tester.pump(const Duration(milliseconds: 100));
+    expect(
+        find.text('U.S. chipmakers may give clues on China hazard'), isNotNull);
+    await tester.tap(find.text('Two Feeds'));
+    await tester.pump();
+    await tester.pump(const Duration(milliseconds: 100));
+    expect(find.text('EPA wins new chance to argue against pesticide ban'),
+        isNotNull);
+    expect(
+        find.text(
+            'Diversity feted as Oscar nominees gather for class photo, and lunch'),
+        isNotNull);
+    await tester.tap(find.text('Home'));
+    await tester.pump();
+    await tester.pump(const Duration(milliseconds: 100));
+    expect(find.byKey(Key('CurrentTime')), isNotNull);
+    await tester.tap(find.text('Feeds'));
+    await tester.pump();
+    await tester.pump(const Duration(milliseconds: 100));
+    expect(
+        find.text('U.S. chipmakers may give clues on China hazard'), isNotNull);
   });
-//  testWidgets('Counter increments smoke test', (WidgetTester tester) async {
-//    // Build our app and trigger a frame.
-//    await tester.pumpWidget(MyApp());
-//
-//    // Verify that our counter starts at 0.
-//    expect(find.text('0'), findsOneWidget);
-//    expect(find.text('1'), findsNothing);
-//
-//    // Tap the '+' icon and trigger a frame.
-//    await tester.tap(find.byIcon(Icons.add));
-//    await tester.pump();
-//
-//    // Verify that our counter has incremented.
-//    expect(find.text('0'), findsNothing);
-//    expect(find.text('1'), findsOneWidget);
-//  });
 }

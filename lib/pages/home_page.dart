@@ -4,7 +4,7 @@ import 'package:myapp/model/model.dart';
 
 class HomePage extends StatelessWidget {
   List<Widget> setup() {
-    final currentTime = CurrentTime();
+    final currentTime = CurrentTime(key: Key('CurrentTime'));
     final feedElement = model.feedBloc.loadFeedElement();
     final widgets = feedElement == null
         ? [currentTime]
