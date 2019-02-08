@@ -56,8 +56,8 @@ class FeedsPageState extends State<FeedsPage> {
             children: [
               CupertinoSegmentedControl<int>(
                 children: {
-                  0: Text('Midnight'),
-                  1: Text('Viridian'),
+                  0: Text('One'),
+                  1: Text('Two'),
                 },
                 onValueChanged: (int newValue) {
                   sharedValue = newValue;
