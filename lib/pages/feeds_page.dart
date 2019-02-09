@@ -57,8 +57,8 @@ class FeedsPageState extends State<FeedsPage> {
               CupertinoSegmentedControl<int>(
                 key: Key('CupertinoSegmentedControl'),
                 children: {
-                  0: Text('One Feed'),
-                  1: Text('Two Feeds'),
+                  0: Text('One Feed', key: Key('One Feed')),
+                  1: Text('Two Feeds', key: Key('Two Feeds'))
                 },
                 onValueChanged: (int newValue) {
                   sharedValue = newValue;
@@ -68,6 +68,7 @@ class FeedsPageState extends State<FeedsPage> {
               ),
               Expanded(
                   child: ListView(
+                key: Key('ListView'),
                 children: model.feedBloc
                     .loadFeedElements()
                     .map((item) => buildItem(item, context))
@@ -87,14 +88,16 @@ class FeedsPageState extends State<FeedsPage> {
 
   Widget buildItem(FeedElement feedElement, BuildContext context) {
     return ListTile(
+      key: Key(feedElement.title),
       title: Text(feedElement.title),
       onTap: () {
         model.feedBloc.saveFeedElement(feedElement);
         Navigator.push(
           context,
           MaterialPageRoute(
-              builder: (context) =>
-                  ItemPage(description: feedElement.description)),
+              builder: (context) => ItemPage(
+                  title: feedElement.title,
+                  description: feedElement.description)),
         );
       },
     );

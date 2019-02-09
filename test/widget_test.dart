@@ -6,50 +6,61 @@
 // tree, read text, and verify that the values of widget properties are correct.
 
 import 'package:flutter/material.dart';
-import 'package:flutter_test/flutter_test.dart';
+import 'package:flutter_test/flutter_test.dart' hide group;
+import 'package:test/test.dart' show group;
 import 'package:myapp/main.dart';
 import 'package:mockito/mockito.dart';
 import 'package:myapp/model/proxies/network_proxy.dart';
 import 'package:myapp/src/feed_sample.dart';
+import 'package:myapp/model/model.dart';
+import 'package:myapp/model/proxies/local_db_proxy.dart';
+import 'package:myapp/model/blocs/feed_bloc.dart';
 
 class MockNetworkProxy extends Mock implements NetworkProxyProvider {}
 
 void main() {
-  testWidgets('Counter increments smoke test', (WidgetTester tester) async {
-    final networkProxy = MockNetworkProxy();
-    when(networkProxy
-            .getFeeds(['http://feeds.reuters.com/reuters/businessNews']))
-        .thenAnswer((_) async => feedBusiness);
-    when(networkProxy
-            .getFeeds(['http://feeds.reuters.com/reuters/entertainment']))
-        .thenAnswer((_) async => feedEntertainment);
-    when(networkProxy
-            .getFeeds(['http://feeds.reuters.com/reuters/environment']))
-        .thenAnswer((_) async => feedEnvironment);
-    await tester.pumpWidget(MyApp());
-    expect(find.byKey(Key('CurrentTime')), isNotNull);
-    await tester.tap(find.text('Feeds'));
-    await tester.pump();
-    await tester.pump(const Duration(milliseconds: 100));
-    expect(
-        find.text('U.S. chipmakers may give clues on China hazard'), isNotNull);
-    await tester.tap(find.text('Two Feeds'));
-    await tester.pump();
-    await tester.pump(const Duration(milliseconds: 100));
-    expect(find.text('EPA wins new chance to argue against pesticide ban'),
-        isNotNull);
-    expect(
-        find.text(
-            'Diversity feted as Oscar nominees gather for class photo, and lunch'),
-        isNotNull);
-    await tester.tap(find.text('Home'));
-    await tester.pump();
-    await tester.pump(const Duration(milliseconds: 100));
-    expect(find.byKey(Key('CurrentTime')), isNotNull);
-    await tester.tap(find.text('Feeds'));
-    await tester.pump();
-    await tester.pump(const Duration(milliseconds: 100));
-    expect(
-        find.text('U.S. chipmakers may give clues on China hazard'), isNotNull);
+  group('description', () {
+    testWidgets('Counter increments smoke test', (WidgetTester tester) async {
+      final networkProxy = MockNetworkProxy();
+      when(networkProxy
+              .getFeeds(['http://feeds.reuters.com/reuters/businessNews']))
+          .thenAnswer((_) async {
+        return Future.value([feedBusiness]);
+      });
+      when(networkProxy.getFeeds([
+        'http://feeds.reuters.com/reuters/entertainment',
+        'http://feeds.reuters.com/reuters/environment'
+      ])).thenAnswer((_) async {
+        return Future.value([feedEntertainment, feedEnvironment]);
+      });
+      model.feedBloc = FeedBloc(networkProxy, LocalDBProxy());
+      await tester.pumpWidget(MyApp());
+      expect(find.byKey(Key('CurrentTime')), findsOneWidget);
+      await tester.tap(find.text('Feeds'));
+      await tester.pumpAndSettle();
+      final firstListItemText =
+          'Supermarket retailer Casino to sell six stores to rival Leclerc';
+      await tester.tap(find.byKey(Key(firstListItemText)));
+      await tester.pumpAndSettle();
+      expect(find.byKey(Key(firstListItemText)), findsOneWidget);
+      final NavigatorState navigator =
+          tester.state<NavigatorState>(find.byType(Navigator));
+      navigator.pop();
+      await tester.pumpAndSettle();
+      expect(find.byKey(Key(firstListItemText)), findsOneWidget);
+      await tester.tap(find.text('Home'));
+      await tester.pumpAndSettle();
+      expect(find.text(firstListItemText), findsOneWidget);
+      await tester.tap(find.text('Feeds'));
+      await tester.pumpAndSettle();
+      await tester.tap(find.byKey(Key('Two Feeds')));
+      await tester.pumpAndSettle();
+      final firstFeedTitle = """Brazil evacuates towns near Vale, ArcelorMittal dams on fears of collapse""";
+      expect(find.byKey(Key(firstFeedTitle)), findsOneWidget);
+      await tester.drag(find.byType(ListView), const Offset(0.0, -2000.0));
+      await tester.pumpAndSettle();
+      final secondFeedTitle = """Grammy-nominated rapper 21 Savage arrested, faces deportation""";
+      expect(find.byKey(Key(secondFeedTitle)), findsOneWidget);
+    });
   });
 }

@@ -1,6 +1,5 @@
 import 'dart:async';
 import 'dart:isolate';
-import 'package:webfeed/webfeed.dart';
 import 'package:http/http.dart' as http;
 
 enum NetworkProxyKeys { urls, port }
@@ -26,6 +25,6 @@ void _feedIsolate(Map params) async {
   final SendPort port = params[NetworkProxyKeys.port];
   final requests = urls.map((url) => http.get(url));
   final responses = await Future.wait(requests);
-  final rssFeeds = responses.map((response) => RssFeed.parse(response.body)).toList();
+  final rssFeeds = responses.map((response) => response.body).toList();
   port.send(rssFeeds);
 }

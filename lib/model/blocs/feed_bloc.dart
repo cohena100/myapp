@@ -17,7 +17,7 @@ class FeedBloc {
       _feedSubject.add([]);
       final List feeds = await _networkProxy.getFeeds(urls);
       final feedElements = feeds
-          .map((feed) => (feed as RssFeed).items)
+          .map((feed) => RssFeed.parse(feed).items)
           .reduce((currentItems, allItems) {
             allItems.addAll(currentItems);
             return allItems;
